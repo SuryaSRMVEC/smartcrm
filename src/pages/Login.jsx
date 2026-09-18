@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { useNavigate, Link, Navigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Mail, Lock, LogIn, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import bgImage from "../assets/bg-img.png";
+import { useAuth } from "../context/useAuth";
 
 const PASSWORD_REGEX =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+={}[\]:;"'<>,.?/\\|~`-]).{8,}$/;
+
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,11 +17,12 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState("");
   const [formError, setFormError] = useState("");
 
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-  if (isLoggedIn === "true") {
-    return <Navigate to="/dashboard" replace />;
-  }
+  // No manual "am I logged in" check here anymore — PublicRoute (which
+  // wraps this route in App.jsx) already handles redirecting logged-in
+  // users away from /login using AuthContext. Duplicating that check
+  // here with raw localStorage was the cause of the redirect loop:
+  // Context and localStorage could disagree about login state, and each
+  // side kept bouncing the user back to the other route.
 
   const handlePasswordChange = (val) => {
     setPassword(val);
@@ -53,41 +57,37 @@ const Login = () => {
       setFormError("No account found. Please sign up first.");
       return;
     }
- 
-const matchedUser = users.find(
-  (user) =>
-    user.email?.trim().toLowerCase() ===
-      email.trim().toLowerCase() &&
-    user.password === password
-);
 
-if (!matchedUser) {
-  setFormError("Invalid email or password.");
-  return;
-}
+    const matchedUser = users.find(
+      (user) =>
+        user.email?.trim().toLowerCase() === email.trim().toLowerCase() &&
+        user.password === password
+    );
 
-if (matchedUser.status === "Inactive") {
-  setFormError(
-    "Your account is inactive. Please contact an administrator."
-  );
-  return;
-}
+    if (!matchedUser) {
+      setFormError("Invalid email or password.");
+      return;
+    }
 
-localStorage.setItem("isLoggedIn", "true");
+    if (matchedUser.status === "Inactive") {
+      setFormError(
+        "Your account is inactive. Please contact an administrator."
+      );
+      return;
+    }
 
-localStorage.setItem(
-  "currentUser",
-  JSON.stringify({
-    name: matchedUser.name,
-    email: matchedUser.email,
-    role: matchedUser.role,
-  })
-);
+    // Single source of truth: AuthContext's login() writes to localStorage
+    // AND updates Context state in the same tick, so every component
+    // reading useAuth() (ProtectedRoute, PublicRoute, RoleProtectedRoute,
+    // Home, etc.) sees the change immediately — no more desync.
+    login({
+      name: matchedUser.name,
+      email: matchedUser.email,
+      role: matchedUser.role,
+    });
 
-window.dispatchEvent(new Event("crmUserUpdated"));
-
-navigate("/dashboard", { replace: true });
-  }
+    navigate("/dashboard", { replace: true });
+  };
 
   return (
     <div

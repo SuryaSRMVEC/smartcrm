@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getUserItem, setUserItem } from "../utils/userStorage";
+import {useAuth} from "../context/useAuth"
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -118,15 +119,12 @@ const Settings = () => {
     alert("Notification preferences saved.");
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("currentUser");
+const { logout } = useAuth();
 
-    window.dispatchEvent(new Event("crmUserUpdated"));
-
-    navigate("/login", { replace: true });
-  };
-
+const handleLogout = () => {
+  logout();
+  navigate("/login", { replace: true });
+};
   return (
 <div className="w-full max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-8 space-y-5 sm:space-y-6 lg:space-y-8">
 

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
 import {
   Users,
   UserRoundSearch,
@@ -12,6 +13,8 @@ import {
 } from "lucide-react";
 
 const Home = () => {
+  const { isLoggedIn } = useAuth();
+
   const features = [
     {
       icon: Users,
@@ -55,7 +58,7 @@ const Home = () => {
     <div className="min-h-screen bg-white text-slate-900">
       <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-          <Link to="/home" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white">
               <LayoutDashboard size={22} />
             </div>
@@ -65,7 +68,7 @@ const Home = () => {
 
           <div className="hidden items-center gap-8 md:flex">
             <Link
-              to="/home"
+              to="/"
               className="text-sm font-medium text-slate-600 hover:text-indigo-600"
             >
               Home
@@ -87,19 +90,30 @@ const Home = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              to="/login"
-              className="hidden rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 sm:block"
-            >
-              Login
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                to="/dashboard"
+                className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
+              >
+                Go to Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="hidden rounded-lg px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 sm:block"
+                >
+                  Login
+                </Link>
 
-            <Link
-              to="/signup"
-              className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
-            >
-              Get Started
-            </Link>
+                <Link
+                  to="/signup"
+                  className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -123,20 +137,32 @@ const Home = () => {
             </p>
 
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Link
-                to="/signup"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
-              >
-                Start for Free
-                <ArrowRight size={18} />
-              </Link>
+              {isLoggedIn ? (
+                <Link
+                  to="/dashboard"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
+                >
+                  Go to Dashboard
+                  <ArrowRight size={18} />
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/signup"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700"
+                  >
+                    Start for Free
+                    <ArrowRight size={18} />
+                  </Link>
 
-              <Link
-                to="/login"
-                className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-semibold text-slate-700 transition hover:bg-slate-50"
-              >
-                Login to Dashboard
-              </Link>
+                  <Link
+                    to="/login"
+                    className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-semibold text-slate-700 transition hover:bg-slate-50"
+                  >
+                    Login to Dashboard
+                  </Link>
+                </>
+              )}
             </div>
 
             <div className="mt-8 flex flex-wrap gap-6 text-sm text-slate-600">
@@ -306,13 +332,23 @@ const Home = () => {
                 designed to help you make better decisions faster.
               </p>
 
-              <Link
-                to="/signup"
-                className="mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 font-semibold text-indigo-600 transition hover:bg-indigo-50"
-              >
-                Create Your Account
-                <ArrowRight size={18} />
-              </Link>
+              {isLoggedIn ? (
+                <Link
+                  to="/dashboard"
+                  className="mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 font-semibold text-indigo-600 transition hover:bg-indigo-50"
+                >
+                  Go to Dashboard
+                  <ArrowRight size={18} />
+                </Link>
+              ) : (
+                <Link
+                  to="/signup"
+                  className="mt-8 inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 font-semibold text-indigo-600 transition hover:bg-indigo-50"
+                >
+                  Create Your Account
+                  <ArrowRight size={18} />
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -330,13 +366,23 @@ const Home = () => {
               simple CRM platform.
             </p>
 
-            <Link
-              to="/signup"
-              className="mt-8 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-7 py-3.5 font-semibold text-white transition hover:bg-indigo-500"
-            >
-              Get Started
-              <ArrowRight size={18} />
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                to="/dashboard"
+                className="mt-8 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-7 py-3.5 font-semibold text-white transition hover:bg-indigo-500"
+              >
+                Go to Dashboard
+                <ArrowRight size={18} />
+              </Link>
+            ) : (
+              <Link
+                to="/signup"
+                className="mt-8 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-7 py-3.5 font-semibold text-white transition hover:bg-indigo-500"
+              >
+                Get Started
+                <ArrowRight size={18} />
+              </Link>
+            )}
           </div>
         </div>
       </section>

@@ -1,17 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { hasPermission } from "../utils/permissions";
+import { useAuth } from "../context/useAuth";
 
 const RoleProtectedRoute = ({ permission }) => {
-  const currentUser = JSON.parse(
-    localStorage.getItem("currentUser") || "null"
-  );
+  const { role } = useAuth();
 
-  const userRole = currentUser?.role;
-
-  if (!userRole || !hasPermission(userRole, permission)) {
-    return <Navigate to="/dashboard" replace />;
+  if (!role || !hasPermission(role, permission)) {
+    return <Navigate to="/unauthorized" replace />;
   }
-
   return <Outlet />;
 };
 

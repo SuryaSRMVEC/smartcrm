@@ -16,14 +16,23 @@ import { NotificationProvider } from "./context/NotificationContext";
 import TeamMembers from "./pages/TeamMembers";
 import Settings from "./pages/Settings";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
+import { AuthProvider } from "./context/AuthContext.jsx";
+import { useAuth } from "./context/useAuth";
+
+const HomeRoute = () => {
+  const { isLoggedIn } = useAuth();
+  return isLoggedIn ? <Navigate to="/dashboard" replace /> : <Home />;
+};
+
 function App() {
   return (
+    <AuthProvider>
     <NotificationProvider>
       <BrowserRouter>
         <Routes>
 
-  {/* Public Home */}
-  <Route path="/" element={<Home />} />
+  {/* Public Home — canonical path is "/" */}
+  <Route path="/" element={<HomeRoute />} />
 
   {/* Public authentication pages */}
   <Route element={<PublicRoute />}>
@@ -31,17 +40,9 @@ function App() {
     <Route path="/signup" element={<Signup />} />
   </Route>
 
-  {/* If /home is typed manually */}
-  <Route
-    path="/home"
-    element={
-      localStorage.getItem("isLoggedIn") === "true"
-        ? <Navigate to="/dashboard" replace />
-        : <Home />
-    }
-  />
+  {/* Legacy path, in case anything still links to /home */}
+  <Route path="/home" element={<Navigate to="/" replace />} />
 
-  {/* Protected CRM */}
 <Route element={<ProtectedRoute />}>
   <Route element={<DashboardLayout />}>
     
@@ -83,10 +84,10 @@ function App() {
 
   </Route>
 </Route>
-
 </Routes>
       </BrowserRouter>
     </NotificationProvider>
+    </AuthProvider>
   );
 }
 

@@ -12,68 +12,69 @@ import {
   UserRoundSearch,
 } from "lucide-react";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { hasPermission } from "../utils/permissions";
+import { useAuth } from "../context/useAuth";
 
 const Sidebar = () => {
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
-
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const userRole = currentUser?.role || "Sales";
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-
-    window.location.href = "/login";
+    logout();
+    navigate("/login", { replace: true });
   };
-const menuItems = [
-  {
-    name: "Dashboard",
-    path: "/dashboard",
-    icon: LayoutDashboard,
-    permission: "dashboard",
-  },
-  {
-    name: "Customers",
-    path: "/customers",
-    icon: Users,
-    permission: "customers",
-  },
-  {
-    name: "Leads",
-    path: "/leads",
-    icon: UserPlus,
-    permission: "leads",
-  },
-  {
-    name: "Deals",
-    path: "/deals",
-    icon: BriefcaseBusiness,
-    permission: "deals",
-  },
-  {
-    name: "Contacts",
-    path: "/contacts",
-    icon: ContactRound,
-    permission: "contacts",
-  },
-  {
-    name: "Tasks",
-    path: "/tasks",
-    icon: CheckSquare,
-    permission: "tasks",
-  },
-  {
-    name: "Reports",
-    path: "/reports",
-    icon: BarChart3,
-    permission: "reports",
-  },
-  {
-    name: "Team Members",
-    path: "/team-members",
-    icon: UserRoundSearch,
-    permission: "team-members",
-  },
-];
+  const menuItems = [
+    {
+      name: "Dashboard",
+      path: "/dashboard",
+      icon: LayoutDashboard,
+      permission: "dashboard",
+    },
+    {
+      name: "Customers",
+      path: "/customers",
+      icon: Users,
+      permission: "customers",
+    },
+    {
+      name: "Leads",
+      path: "/leads",
+      icon: UserPlus,
+      permission: "leads",
+    },
+    {
+      name: "Deals",
+      path: "/deals",
+      icon: BriefcaseBusiness,
+      permission: "deals",
+    },
+    {
+      name: "Contacts",
+      path: "/contacts",
+      icon: ContactRound,
+      permission: "contacts",
+    },
+    {
+      name: "Tasks",
+      path: "/tasks",
+      icon: CheckSquare,
+      permission: "tasks",
+    },
+    {
+      name: "Reports",
+      path: "/reports",
+      icon: BarChart3,
+      permission: "reports",
+    },
+    {
+      name: "Team Members",
+      path: "/team-members",
+      icon: UserRoundSearch,
+      permission: "team-members",
+    },
+  ];
 
   return (
     <aside className="relative z-20 w-16 md:w-64 min-h-screen bg-slate-900 text-white flex flex-col transition-all duration-300">
