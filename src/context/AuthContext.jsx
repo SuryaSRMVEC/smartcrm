@@ -4,7 +4,8 @@ import { AuthContext } from "./AuthContext.js";
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem("currentUser") || "null");
+      const storedUser = localStorage.getItem("currentUser");
+      return storedUser ? JSON.parse(storedUser) : null;
     } catch {
       return null;
     }
@@ -26,12 +27,18 @@ export const AuthProvider = ({ children }) => {
     const syncAcrossTabs = (event) => {
       if (event.key === "currentUser") {
         try {
-          setCurrentUser(
-            event.newValue ? JSON.parse(event.newValue) : null
-          );
+          const user = event.newValue
+            ? JSON.parse(event.newValue)
+            : null;
+
+          setCurrentUser(user);
         } catch {
           setCurrentUser(null);
         }
+      }
+
+      if (event.key === "isLoggedIn" && event.newValue === null) {
+        setCurrentUser(null);
       }
     };
 
@@ -44,7 +51,7 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     currentUser,
-    isLoggedIn: Boolean(currentUser),
+    isLoggedIn: !!currentUser,
     role: currentUser?.role || null,
     login,
     logout,
