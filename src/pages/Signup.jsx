@@ -204,6 +204,7 @@ const Signup = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
+                maxLength={15}
                 onChange={(e) => handlePasswordChange(e.target.value)}
                 placeholder="Password"
                 className={`w-full text-sm bg-slate-50/70 border rounded-xl pl-10 pr-9 py-2.5 outline-none transition text-slate-800 placeholder-slate-400 ${
@@ -245,6 +246,7 @@ const Signup = () => {
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
+                maxLength={15}
                 onChange={(e) =>
                   handleConfirmPasswordChange(e.target.value)
                 }

@@ -204,6 +204,7 @@ const Login = () => {
             <input
               type={showPassword ? "text" : "password"}
               value={password}
+              maxLength={15}
               onChange={(e) => handlePasswordChange(e.target.value)}
               placeholder="Enter your password"
               className={`w-full text-sm bg-slate-50/70 border rounded-xl pl-10 pr-10 py-2.5 outline-none transition text-slate-800 placeholder-slate-400 focus:bg-white ${
