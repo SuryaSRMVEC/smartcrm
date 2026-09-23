@@ -13,8 +13,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 
 const PASSWORD_REGEX =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};:'",.<>/?\\|`~]).{8,}$/;
-
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^]).{8,15}$/;
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();

@@ -4,7 +4,7 @@ import { UserPlus, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import bgImage from "../assets/bg-img.png";
 
 const PASSWORD_REGEX =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^()_+={}[\]:;"'<>,.?/\\|~`-]).{8,}$/;
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^]).{8,15}$/;
 
 const Signup = () => {
   const navigate = useNavigate();
